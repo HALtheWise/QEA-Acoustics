@@ -104,7 +104,7 @@ t = [1:length(x_piano)]/Fs;
 % Now if you look at the envelope of the piano, it kind of looks like a cosine
 % for t<0.5, and almost zero after that.  Let's use that as the envelope...
 
-env=(cos(t*2*pi)+1).*(t<0.5)+0.1;
+env=(cos(t*2*pi)+1).*(t<0.5)+0.05;
 
 
 
@@ -113,7 +113,7 @@ env=(cos(t*2*pi)+1).*(t<0.5)+0.1;
 % by the envelope
 
 % this is the fundamental frequency
-f_fund = 440;
+f_fund = 880;
 
 % create a bunch of harmonics with the scale factors we gave you above
 x_tones = cos(2*pi*f_fund*t) + 0.2*cos(2*pi*2*f_fund*t) ...
