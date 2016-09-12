@@ -7,14 +7,14 @@ T = 1/f;% Time period of x(t)
 tmin = 0;% Time interval minimum value for display
 tmax = 5*T;% Time interval minimum value for display
 dt = T/100;
-dt1 = 1/10000;% Sampling period of 1/10000 sec
-dt2 = 1/5000;% Sampling period of 1/5000 sec
+dt1 = 1/2000;% Sampling period of 1/10000 sec
+dt2 = 1/1000;% Sampling period of 1/5000 sec
 t = tmin:dt:tmax; %Time span for x(t)
 t1 = tmin:dt1:tmax; %Time span for x(t)sampled at at every 1/10000 sec
 t2 = tmin:dt2:tmax;%Time span for x(t)sampled at at every 1/5000 sec
-x = sin(2*pi*f*t);% Signal x(t)
-x1 = sin(2*pi*f*t1);% Samples at fs1
-x2 = sin(2*pi*f*t2);% Samples at fs2
+x = cos(2*pi*f*t);% Signal x(t)
+x1 = cos(2*pi*f*t1);% Samples at fs1
+x2 = cos(2*pi*f*t2);% Samples at fs2
 subplot(211)
 plot(t,x,'r');% Plot original signal in RED
 hold on
