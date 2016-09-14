@@ -30,7 +30,7 @@ Rasterize@ListLinePlot[Transpose@{Subdivide[-Pi,Pi,N-1],Abs@fft},PlotRange->Full
 
 
 (* ::Input::Initialization:: *)
-playSound[data_]:=Module[{path=StringReplace["/tmp/sound{rand}.wav","{rand}"-> RandomInteger[999]]},Export[path,data];SystemOpen[path]]
+playSound[data_]:=Module[{path=StringReplace["/tmp/sound{rand}.wav","{rand}"-> ToString@RandomInteger[999]]},Export[path,data];SystemOpen[path]]
 playSound[data_,fs_]:=playSound[Sound@SampledSoundList[data,fs]]
 
 
