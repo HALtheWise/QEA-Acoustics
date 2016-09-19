@@ -1,0 +1,360 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.4' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     10459,        352]
+NotebookOptionsPosition[      8777,        287]
+NotebookOutlinePosition[      9120,        302]
+CellTagsIndexPosition[      9077,        299]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Comms final project: Acoustic Modem", "Title",
+ CellChangeTimes->{{3.6826813785335817`*^9, 3.682681379590159*^9}, {
+  3.682710876474948*^9, 3.682710892530466*^9}, {3.682980932118884*^9, 
+  3.682980953632352*^9}, {3.6832870653509636`*^9, 3.6832870854599743`*^9}, {
+  3.6832873288913145`*^9, 3.6832873404404697`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"SetDirectory", "@", 
+   RowBox[{"NotebookDirectory", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"<<", "\"\<../MMA library.m\>\""}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.682710916634346*^9, 3.682710945444784*^9}, {
+  3.682711378657494*^9, 3.682711389969411*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Shared constants", "Section",
+ CellChangeTimes->{{3.6832875389373174`*^9, 3.6832875420816317`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"Global`databaud", " ", "=", " ", 
+    TemplateBox[{"10","\"Hz\"","hertz","\"Hertz\""},
+     "Quantity"]}], ";"}], 
+  RowBox[{"(*", " ", "hertz", " ", "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Global`speakerbaud", " ", "=", " ", 
+    TemplateBox[{"40000","\"Hz\"","hertz","\"Hertz\""},
+     "Quantity"]}], ";"}], 
+  RowBox[{"(*", " ", "hertz", " ", "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Global`carrierfreq", "=", 
+    TemplateBox[{"500","\"Hz\"","hertz","\"Hertz\""},
+     "Quantity"]}], ";"}], 
+  RowBox[{"(*", " ", "hertz", " ", "*)"}]}]}], "Input",
+ CellChangeTimes->{{3.683287543924816*^9, 3.683287605911014*^9}, {
+  3.6832876485882816`*^9, 3.683287702112633*^9}, {3.6832877420886307`*^9, 
+  3.683287760777499*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Transmitter", "Section",
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellChangeTimes->{3.683287430332458*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"With", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"context", "=", "\"\<tx`\>\""}], "}"}], ",", 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Context", "[", "]"}], " ", "\[NotEqual]", " ", "context"}], 
+      ",", 
+      RowBox[{"Begin", "[", "context", "]"}]}], "]"}]}], "]"}], ";", 
+  RowBox[{"Dynamic", "[", 
+   RowBox[{"Refresh", "[", 
+    RowBox[{
+     RowBox[{"Context", "[", "]"}], ",", 
+     RowBox[{"UpdateInterval", "\[Rule]", "1"}]}], "]"}], "]"}]}]], "Input",
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellChangeTimes->{3.683287430333458*^9}],
+
+Cell[BoxData[
+ DynamicBox[ToBoxes[
+   Refresh[
+    Context[], UpdateInterval -> 1], StandardForm],
+  ImageSizeCache->{49., {0., 9.}}]], "Output",
+ CellChangeTimes->{{3.6832874303354588`*^9, 3.683287437226147*^9}, 
+   3.683288976625736*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Step 1: Generate signal codes", "Subsection",
+ CellChangeTimes->{{3.6832874303384585`*^9, 3.683287485779002*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"codeLen", "=", 
+   RowBox[{"speakerbaud", "/", "databaud"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.6832878412795486`*^9, 3.683287864545875*^9}}],
+
+Cell["\<\
+The codes are still complex at this point, and will only be transformed to \
+real space before being played.\
+\>", "Text",
+ CellChangeTimes->{{3.68328790299572*^9, 3.6832879282152414`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"baseCode", " ", "=", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Exp", "[", 
+      RowBox[{"I", " ", "2", "Pi", " ", 
+       RowBox[{"QuantityMagnitude", "@", "carrierfreq"}], " ", "#"}], "]"}], 
+     "&"}], "/@", 
+    RowBox[{"N", "@", 
+     RowBox[{"Range", "[", 
+      RowBox[{"0", ",", 
+       RowBox[{"1", "/", 
+        RowBox[{"QuantityMagnitude", "@", "databaud"}]}], ",", 
+       RowBox[{"1", "/", 
+        RowBox[{"QuantityMagnitude", "@", "speakerbaud"}]}]}], "]"}]}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"codes", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"baseCode", "*", 
+      RowBox[{"Exp", "[", 
+       RowBox[{"#", " ", "I"}], "]"}]}], "&"}], "/@", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "Pi"}], "}"}]}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.6832878230457253`*^9, 3.6832878254189625`*^9}, {
+  3.6832878906134815`*^9, 3.6832878932117414`*^9}, {3.683287933052725*^9, 
+  3.68328805851427*^9}, {3.683288105199736*^9, 3.683288144851736*^9}, {
+  3.6832881842847357`*^9, 3.683288212465736*^9}, {3.6832882879867363`*^9, 
+  3.6832883277047358`*^9}, {3.683288991190736*^9, 3.683289062324736*^9}, {
+  3.6832891202340417`*^9, 3.683289162335251*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Step 2: Retrieve data to transmit", "Subsection",
+ CellChangeTimes->{{3.6832874694333677`*^9, 3.683287494997924*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"rawdata", "=", "\"\<xx\>\""}], ";"}]], "Input",
+ CellChangeTimes->{{3.6832892655645733`*^9, 3.6832892844914656`*^9}, {
+  3.6832895381278267`*^9, 3.683289538285843*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Step 3: Convert data to symbols", "Subsection",
+ CellChangeTimes->{{3.683287497098134*^9, 3.683287505773001*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"bytes", "=", 
+   RowBox[{"ToCharacterCode", "@", "rawdata"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"symbols", "=", 
+   RowBox[{"Flatten", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"IntegerDigits", "[", 
+       RowBox[{"#", ",", "2"}], "]"}], "&"}], "/@", "bytes"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Append", "[", 
+  RowBox[{
+   RowBox[{"symbols", "[", 
+    RowBox[{"[", 
+     RowBox[{"1", ";;", "10"}], "]"}], "]"}], ",", "\"\<...\>\""}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.6832892901300297`*^9, 3.683289317486765*^9}, {
+  3.683289426920707*^9, 3.6832895837293863`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "1", ",", "1", ",", "1", ",", "1", ",", "0", ",", "0", ",", "0", ",", "1", 
+   ",", "1", ",", "1", ",", "\<\"...\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{{3.6832894888539*^9, 3.6832895843164454`*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Step 4: Interleave transmit codes", "Subsection",
+ CellChangeTimes->{{3.683287508639288*^9, 3.6832875153889627`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"signal", "=", 
+   RowBox[{"Flatten", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"codes", "[", 
+       RowBox[{"[", 
+        RowBox[{"#", "+", "1"}], "]"}], "]"}], "&"}], "/@", "symbols"}], 
+    "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.6832896041284266`*^9, 3.683289647049718*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Step 5: Transmit and save", "Subsection",
+ CellChangeTimes->{{3.683287517913215*^9, 3.6832875221366377`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"sound", "=", 
+   RowBox[{"SampledSoundList", "[", 
+    RowBox[{
+     RowBox[{"Re", "@", "signal"}], ",", 
+     RowBox[{"QuantityMagnitude", "@", "speakerbaud"}]}], "]"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.6832898991129217`*^9, 3.6832899723882484`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"EmitSound", "[", "sound", "]"}]], "Input",
+ CellChangeTimes->{{3.683289654034416*^9, 3.6832897266566777`*^9}, {
+  3.6832899750975194`*^9, 3.683289998117821*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Export", "[", 
+  RowBox[{"\"\<test data\\output.wav\>\"", ",", "sound"}], "]"}]], "Input",
+ CellChangeTimes->{{3.6832898427072816`*^9, 3.683289843642375*^9}, {
+  3.6832900052395334`*^9, 3.683290039747984*^9}},
+ EmphasizeSyntaxErrors->True],
+
+Cell[BoxData["\<\"test data\\\\output.wav\"\>"], "Output",
+ CellChangeTimes->{{3.6832900199470043`*^9, 3.6832900402130303`*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Cleanup", "Subsection",
+ CellChangeTimes->{{3.6832897656275744`*^9, 3.6832897685428658`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"With", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"context", "=", "\"\<tx`\>\""}], "}"}], ",", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Context", "[", "]"}], "\[Equal]", "context"}], ",", 
+     RowBox[{"End", "[", "]"}], ",", "\"\<Not in context\>\""}], "]"}]}], 
+  "]"}]], "Input",
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellChangeTimes->{3.6832874303394585`*^9}],
+
+Cell[BoxData["\<\"tx`\"\>"], "Output",
+ CellChangeTimes->{3.683287430340459*^9, 3.6832901064236507`*^9}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{960, 1004},
+WindowMargins->{{426, Automatic}, {Automatic, 0}},
+FrontEndVersion->"11.0 for Microsoft Windows (64-bit) (July 28, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 321, 4, 101, "Title"],
+Cell[904, 28, 331, 7, 66, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1260, 39, 105, 1, 70, "Section"],
+Cell[1368, 42, 820, 21, 112, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2225, 68, 120, 3, 70, "Section"],
+Cell[CellGroupData[{
+Cell[2370, 75, 625, 19, 50, "Input"],
+Cell[2998, 96, 239, 6, 30, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3274, 107, 119, 1, 49, "Subsection"],
+Cell[3396, 110, 182, 4, 30, "Input"],
+Cell[3581, 116, 199, 4, 30, "Text"],
+Cell[3783, 122, 1222, 31, 69, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5042, 158, 123, 1, 49, "Subsection"],
+Cell[5168, 161, 203, 4, 30, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5408, 170, 119, 1, 49, "Subsection"],
+Cell[CellGroupData[{
+Cell[5552, 175, 658, 20, 69, "Input"],
+Cell[6213, 197, 246, 5, 30, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6508, 208, 123, 1, 49, "Subsection"],
+Cell[6634, 211, 326, 10, 30, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6997, 226, 115, 1, 49, "Subsection"],
+Cell[7115, 229, 297, 8, 30, "Input"],
+Cell[7415, 239, 185, 3, 30, "Input"],
+Cell[CellGroupData[{
+Cell[7625, 246, 263, 5, 30, "Input"],
+Cell[7891, 253, 128, 1, 30, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8068, 260, 99, 1, 49, "Subsection"],
+Cell[CellGroupData[{
+Cell[8192, 265, 426, 13, 30, "Input"],
+Cell[8621, 280, 104, 1, 87, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
